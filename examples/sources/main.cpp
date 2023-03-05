@@ -38,7 +38,14 @@ int main()
 
 	printf("Connection has successfully been established!\n");
 
+	//Get a non transaction that can commit without calling commit()
+	pqxx::nontransaction* nonTransaction = sc::GetNonTransaction(con);
+	if (nonTransaction == nullptr)
+		return -1;
+
+	printf("A non transaction has been created!\n");
+
 	//Close connection
-	printf("Closing connection\n");
 	delete con;
+	printf("Connection has been closed!\n");
 }
