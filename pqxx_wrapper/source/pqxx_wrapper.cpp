@@ -2,11 +2,19 @@
 
 namespace sc
 {
-	pqxx::connection* ReturnConnection(std::string sqlConnect)
+	pqxx::connection* ConnectDatabase(std::string url)
 	{
 		pqxx::connection* con = nullptr;
 
-		con = new pqxx::connection{ sqlConnect };
+		try
+		{
+			con = new pqxx::connection(url);
+		}
+		catch (std::exception const& e)
+		{
+			std::cerr << "ERROR: " << e.what() << '\n';
+			DEBUG_ASSERT(false && "Failed to establish a connection with the database");
+		}
 
 		return con;
 	}
