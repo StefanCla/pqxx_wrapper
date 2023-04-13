@@ -10,7 +10,7 @@ namespace sc
 
 	TEST(Connection, MUT_CONNECTION_CORRECT)
 	{
-		std::string url = "postgresql://postgres:admin@localhost:5432/unittest";
+		std::string url = "postgresql://postgres:admin@localhost:5432";
 		pqxx::connection* con = sc::ConnectDatabase(url);
 
 		EXPECT_FALSE(con == nullptr);
@@ -28,7 +28,7 @@ namespace sc
 
 	TEST(Connection, MUT_CONNECTION_INCORRECT)
 	{
-		std::string url = "postgreasql://postgreeees:admin@locqlhost:5432/unuttest";
+		std::string url = "postgreasql://postgreeees:admin@locqlhost:5432";
 		pqxx::connection* con = sc::ConnectDatabase(url);
 
 		EXPECT_TRUE(con == nullptr);

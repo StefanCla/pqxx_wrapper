@@ -34,4 +34,14 @@ namespace sc
 	/// <param name="con">: Connection to a database</param>
 	/// <returns>Returns pqxx::nontransaction on success | nullptr on fail</returns>
 	pqxx::nontransaction* GetNonTransaction(pqxx::connection* con);
+
+	/// <summary>
+	/// Executes a SQL query on the database.
+	/// Should only be used for updates and inserts.
+	/// Makes uses of the exec() function in pqxx.
+	/// </summary>
+	/// <param name="transaction">: Transaction of the database to be used</param>
+	/// <param name="sqlQuery">: SQL query to be executed</param>
+	/// <returns>Returns pqxx::result</returns>
+	pqxx::result Query(pqxx::transaction_base* transaction, std::string sqlQuery);
 }

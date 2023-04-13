@@ -20,8 +20,8 @@ namespace sc
 		}
 		else
 		{
-			printf("ERROR: the connection url is empty\n");
-			DEBUG_ASSERT(false && "the connection url is empty");
+			printf("ERROR: url is empty\n");
+			DEBUG_ASSERT(false && "url is empty");
 		}
 
 		return con;
@@ -47,14 +47,14 @@ namespace sc
 			}
 			else
 			{
-				printf("ERROR: Con has no valid connection to a database\n");
-				DEBUG_ASSERT(false && "Con has no valid connection to a database");
+				printf("ERROR: con has no valid connection to a database\n");
+				DEBUG_ASSERT(false && "con has no valid connection to a database");
 			}
 		}
 		else
 		{
-			printf("ERROR: Con is a null pointer\n");
-			DEBUG_ASSERT(false && "Con is a null pointer");
+			printf("ERROR: con is a null pointer\n");
+			DEBUG_ASSERT(false && "con is a null pointer");
 		}
 
 		return transaction;
@@ -80,16 +80,49 @@ namespace sc
 			}
 			else
 			{
-				printf("ERROR: Con has no valid connection to a database\n");
-				DEBUG_ASSERT(false && "Con has no valid connection to a database");
+				printf("ERROR: con has no valid connection to a database\n");
+				DEBUG_ASSERT(false && "con has no valid connection to a database");
 			}
 		}
 		else
 		{
-			printf("ERROR: Con is a null pointer\n");
-			DEBUG_ASSERT(false && "Con is a null pointer");
+			printf("ERROR: con is a null pointer\n");
+			DEBUG_ASSERT(false && "con is a null pointer");
 		}
 
 		return nonTransaction;
+	}
+
+	pqxx::result Query(pqxx::transaction_base* transaction, std::string sqlQuery)
+	{
+		pqxx::result result{};
+
+		if (transaction != nullptr)
+		{
+			if (!sqlQuery.empty())
+			{
+				try
+				{
+					result = transaction->exec(sqlQuery);
+				}
+				catch (std::exception const& e)
+				{
+					std::cerr << "ERROR: " << e.what() << '\n';
+					DEBUG_ASSERT(false && "An error has occured when executing the SQL script");
+				}
+			}
+			else
+			{
+				printf("ERROR: sqlQuery is empty\n");
+				DEBUG_ASSERT(false && "sqlQuery is empty");
+			}
+		}
+		else
+		{
+			printf("ERROR: transaction is a null pointer\n");
+			DEBUG_ASSERT(false && "transaction is a null pointer");
+		}
+
+		return result;
 	}
 }

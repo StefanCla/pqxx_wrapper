@@ -187,6 +187,7 @@ xcopy /E /Y /R "$(SolutionDir)extern\libs\$(PlatformShortName)\libssl-3-x64.dll"
   <ItemGroup>
     <ClCompile Include="sources\connection.cpp" />
     <ClCompile Include="sources\main.cpp" />
+    <ClCompile Include="sources\query.cpp" />
     <ClCompile Include="sources\transaction.cpp" />
   </ItemGroup>
   <ItemGroup>

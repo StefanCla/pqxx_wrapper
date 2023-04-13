@@ -16,7 +16,7 @@ namespace scTest
 			nullptrCon(nullptr),
 			invalidCon(nullptr)
 		{
-			std::string url = "postgresql://postgres:admin@localhost:5432/unittest";
+			std::string url = "postgresql://postgres:admin@localhost:5432";
 			correctCon = sc::ConnectDatabase(url);
 
 			//Results in errors (which is good) but will cause the body of the unit tests to fail as well
