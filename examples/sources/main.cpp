@@ -67,11 +67,13 @@ int main()
 
 	printf("A non transaction has been created!\n");
 
+	//Create new table
 	std::string sqlCreateTable = "CREATE TABLE exampletable (id SERIAL PRIMARY KEY, text TEXT NOT NULL, int INTEGER NOT NULL)";
 	sc::Query(nonTransaction, sqlCreateTable);
 
 	printf("A table has been created!\n");
 
+	//Insert data in new table
 	printf("Name...\n");
 	std::string name;
 	std::cin >> name;
@@ -84,6 +86,15 @@ int main()
 	sc::Query(nonTransaction, sqlInsertTable);
 
 	printf("Data has been inserted into the database!\n");
+
+	//Obtain data from new table
+	std::string sqlSelectName = "SELECT text FROM exampletable WHERE id = 1";
+	std::string insertedName = sc::QueryValue<std::string>(nonTransaction, sqlSelectName);
+
+	std::string sqlSelectAge = "SELECT int FROM exampletable WHERE id = 1";
+	int insertedAge = sc::QueryValue<int>(nonTransaction, sqlSelectAge);
+
+	printf("User #1 has: name - %s and age - %d\n", insertedName.c_str(), insertedAge);
 
 	//Close connection
 	con->close();

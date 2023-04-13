@@ -78,17 +78,14 @@ namespace sc
 	{
 		//Null transaction, Correct script
 		pqxx::result resultOne = sc::Query(nullptrNonTransaction, corrctScript);
-
 		EXPECT_EQ(resultOne.affected_rows(), 0);
 
 		//Correct transaction, Null script
 		pqxx::result resultTwo = sc::Query(nonTransaction, emptyScript);
-
 		EXPECT_EQ(resultTwo.affected_rows(), 0);
 
 		//Null transaction, Null script
 		pqxx::result resultThree = sc::Query(nullptrNonTransaction, emptyScript);
-
 		EXPECT_EQ(resultThree.affected_rows(), 0);
 	}
 
