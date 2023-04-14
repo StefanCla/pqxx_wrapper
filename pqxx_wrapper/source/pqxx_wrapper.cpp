@@ -2,7 +2,7 @@
 
 namespace sc
 {
-	pqxx::connection* ConnectDatabase(std::string url)
+	pqxx::connection* ConnectDatabase(pqxx::zview url)
 	{
 		pqxx::connection* con = nullptr;
 
@@ -93,7 +93,7 @@ namespace sc
 		return nonTransaction;
 	}
 
-	pqxx::result Query(pqxx::transaction_base* transaction, std::string sqlQuery)
+	pqxx::result Query(pqxx::transaction_base* transaction, pqxx::zview sqlQuery)
 	{
 		pqxx::result result{};
 

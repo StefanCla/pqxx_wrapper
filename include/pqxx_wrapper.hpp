@@ -19,7 +19,7 @@ namespace sc
 	/// </summary>
 	/// <param name="url">: Postres connection url</param>
 	/// <returns>Returns pqxx::connection on success | nullptr on fail</returns>
-	pqxx::connection* ConnectDatabase(std::string url);
+	pqxx::connection* ConnectDatabase(pqxx::zview url);
 
 	/// <summary>
 	/// Get a one-time transaction of the given database connection
@@ -43,7 +43,7 @@ namespace sc
 	/// <param name="transaction">: Transaction of the database to be used</param>
 	/// <param name="sqlQuery">: SQL query to be executed</param>
 	/// <returns>Returns pqxx::result</returns>
-	pqxx::result Query(pqxx::transaction_base* transaction, std::string sqlQuery);
+	pqxx::result Query(pqxx::transaction_base* transaction, pqxx::zview sqlQuery);
 
 	/// <summary>
 	/// Executes a SQL query on the database.
@@ -54,7 +54,7 @@ namespace sc
 	/// <param name="sqlQuery">: SQL query to be executed</param>
 	/// <returns>Returns type T from the database</returns>
 	template <typename T>
-	T QueryValue(pqxx::transaction_base* transaction, std::string sqlQuery)
+	T QueryValue(pqxx::transaction_base* transaction, pqxx::zview sqlQuery)
 	{
 		T result{};
 
@@ -96,7 +96,7 @@ namespace sc
 	/// <param name="sqlQuery">: SQL query to be executed</param>
 	/// <returns>Returns a vector of type T from the database</returns>
 	template <typename T>
-	std::vector<T> QueryArrayValue(pqxx::transaction_base* transaction, std::string sqlQuery)
+	std::vector<T> QueryArrayValue(pqxx::transaction_base* transaction, pqxx::zview sqlQuery)
 	{
 		std::vector<T> result{};
 
@@ -158,7 +158,7 @@ namespace sc
 	/// <param name="...args">: Arguments to be passed in the prepare statement</param>
 	/// <returns>Returns pqxx::result</returns>
 	template<typename... Args>
-	pqxx::result Prepare(pqxx::connection* connection, pqxx::transaction_base* transaction, std::string sqlQuery, Args&&... args)
+	pqxx::result Prepare(pqxx::connection* connection, pqxx::transaction_base* transaction, pqxx::zview sqlQuery, Args&&... args)
 	{
 		pqxx::result result{};
 
