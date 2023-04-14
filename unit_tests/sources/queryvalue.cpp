@@ -149,7 +149,7 @@ namespace sc
 
 	TEST_F(QueryValueTestF, MUT_QUERYVALUE_WRONG_RETURN_TYPE)
 	{
-		//Returns a script, to an int
+		//Returns a string, to an int
 		int value = sc::QueryValue<int>(nonTransaction, correctScriptString);
 		EXPECT_EQ(value, 0);
 	}

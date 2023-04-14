@@ -47,7 +47,7 @@ namespace sc
 
 	/// <summary>
 	/// Executes a SQL query on the database.
-	/// Should only be used to receive 1 datatype. For arrays use QueryArrayValue.
+	/// Should only be used to receive 1 datatype. For arrays, use QueryArrayValue.
 	/// </summary>
 	/// <typeparam name="T">: Datatype to be receiving</typeparam>
 	/// <param name="transaction">: Transaction of the database to be used</param>
@@ -65,6 +65,66 @@ namespace sc
 				try
 				{
 					result = transaction->query_value<T>(sqlQuery);
+				}
+				catch (std::exception const& e)
+				{
+					std::cerr << "ERROR: " << e.what() << '\n';
+					DEBUG_ASSERT(false && "An error has occured when executing the SQL script");
+				}
+			}
+			else
+			{
+				printf("ERROR: sqlQuery is empty\n");
+				DEBUG_ASSERT(false && "sqlQuery is empty");
+			}
+		}
+		else
+		{
+			printf("ERROR: transaction is a null pointer\n");
+			DEBUG_ASSERT(false && "transaction is a null pointer");
+		}
+
+		return result;
+	}
+
+	/// <summary>
+	/// Executes a SQL query on the database to retreived an array of type T.
+	/// Should only be used to receive an array of a specific datatype. For single values, use QueryValue.
+	/// </summary>
+	/// <typeparam name="T">: Datatype to be received</typeparam>
+	/// <param name="transaction">: Transaction of the database to be used</param>
+	/// <param name="sqlQuery">: SQL query to be executed</param>
+	/// <returns>Returns a vector of type T from the database</returns>
+	template <typename T>
+	std::vector<T> QueryArrayValue(pqxx::transaction_base* transaction, std::string sqlQuery)
+	{
+		std::vector<T> result{};
+
+		if (transaction != nullptr)
+		{
+			if (!sqlQuery.empty())
+			{
+				try
+				{
+					pqxx::result sqlResult = sc::Query(transaction, sqlQuery);
+					if (!sqlResult.empty())
+					{
+						pqxx::array_parser parse = sqlResult[0][0].as_array();
+
+						std::pair<pqxx::array_parser::juncture, std::string> temporaryState;
+						do
+						{
+							temporaryState = parse.get_next();
+							if (temporaryState.first == pqxx::array_parser::juncture::string_value)
+								result.push_back(pqxx::from_string<T>(temporaryState.second));
+
+						} while (temporaryState.first != pqxx::array_parser::juncture::done);
+					}
+					else
+					{
+						printf("ERROR: sqlQuery did not return any results\n");
+						DEBUG_ASSERT(false && "sqlQuery did not return any results");
+					}
 				}
 				catch (std::exception const& e)
 				{

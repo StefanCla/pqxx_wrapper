@@ -96,6 +96,12 @@ int main()
 
 	printf("User #1 has: name - %s and age - %d\n", insertedName.c_str(), insertedAge);
 
+	//Create new array table
+	std::string sqlCreateArrayTable = "CREATE TABLE examplearraytable (id SERIAL PRIMARY KEY, text TEXT[] NOT NULL, int INTEGER[] NOT NULL)";
+	sc::Query(nonTransaction, sqlCreateArrayTable);
+
+	printf("An array table has been created!\n");
+
 	//Close connection
 	con->close();
 	delete con;
