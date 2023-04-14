@@ -146,4 +146,57 @@ namespace sc
 
 		return result;
 	}
+
+	/// <summary>
+	/// Prepares a statement and immediately executes it.
+	/// Can be used for passing array data to the database.
+	/// </summary>
+	/// <typeparam name="...Args">: Arguments to be passed in the prepare statement</typeparam>
+	/// <param name="connection">: Connection to the database to be used</param>
+	/// <param name="transaction">: Transaction of the database to be used</param>
+	/// <param name="sqlQuery">: SQL query to be executed</param>
+	/// <param name="...args">: Arguments to be passed in the prepare statement</param>
+	/// <returns>Returns pqxx::result</returns>
+	template<typename... Args>
+	pqxx::result Prepare(pqxx::connection* connection, pqxx::transaction_base* transaction, std::string sqlQuery, Args&&... args)
+	{
+		pqxx::result result{};
+
+		if (connection != nullptr)
+		{
+			if (transaction != nullptr)
+			{
+				if (!sqlQuery.empty())
+				{
+					try
+					{
+						connection->prepare("preparedStatement", sqlQuery);
+						result = transaction->exec_prepared("preparedStatement", args...);
+					}
+					catch (std::exception const& e)
+					{
+						std::cerr << "ERROR: " << e.what() << '\n';
+						DEBUG_ASSERT(false && "An error has occured when executing the SQL script");
+					}
+				}
+				else
+				{
+					printf("ERROR: sqlQuery is empty\n");
+					DEBUG_ASSERT(false && "sqlQuery is empty");
+				}
+			}
+			else
+			{
+				printf("ERROR: transaction is a null pointer\n");
+				DEBUG_ASSERT(false && "transaction is a null pointer");
+			}
+		}
+		else
+		{
+			printf("ERROR: connection is a null pointer\n");
+			DEBUG_ASSERT(false && "connection is a null pointer");
+		}
+
+		return result;
+	}
 }

@@ -7,11 +7,10 @@
 
 namespace sc
 {
-
-	class TransactionTestF : public ::testing::Test
+	class QueryTestF : public ::testing::Test
 	{
 	public:
-		TransactionTestF() :
+		QueryTestF() :
 			connection(nullptr),
 			nonTransaction(nullptr),
 			nullptrNonTransaction(nullptr),
@@ -53,7 +52,7 @@ namespace sc
 			invalidScript = "UPDATE unitsingle SET text = 'updatedname2', int = 10, charizard = '@', float = 6.8, bool = true WHERE id = 1";
 		}
 
-		~TransactionTestF()
+		~QueryTestF()
 		{
 			delete nonTransaction;
 			delete connection;
@@ -67,14 +66,14 @@ namespace sc
 		std::string invalidScript;
 	};
 
-	TEST_F(TransactionTestF, MUT_QUERY_CORRECT)
+	TEST_F(QueryTestF, MUT_QUERY_CORRECT)
 	{
 		pqxx::result result = sc::Query(nonTransaction, corrctScript);
 
 		EXPECT_EQ(result.affected_rows(), 1);
 	}
 
-	TEST_F(TransactionTestF, MUT_QUERY_NULL)
+	TEST_F(QueryTestF, MUT_QUERY_NULL)
 	{
 		//Null transaction, Correct script
 		pqxx::result resultOne = sc::Query(nullptrNonTransaction, corrctScript);
@@ -89,7 +88,7 @@ namespace sc
 		EXPECT_EQ(resultThree.affected_rows(), 0);
 	}
 
-	TEST_F(TransactionTestF, MUT_QUERY_INVALID)
+	TEST_F(QueryTestF, MUT_QUERY_INVALID)
 	{
 		pqxx::result result = sc::Query(nonTransaction, invalidScript);
 

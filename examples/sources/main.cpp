@@ -8,6 +8,8 @@ int main()
 {
 	//Connect to the database
 	//Get details
+	printf("Establish a connection with the database...\n");
+
 	printf("Username:..\n");
 	std::string username;
 	std::cin >> username;
@@ -74,15 +76,15 @@ int main()
 	printf("A table has been created!\n");
 
 	//Insert data in new table
-	printf("Name...\n");
-	std::string name;
-	std::cin >> name;
+	printf("Player name...\n");
+	std::string playername;
+	std::cin >> playername;
 
 	printf("Age...\n");
 	std::string age;
 	std::cin >> age;
 
-	std::string sqlInsertTable = "INSERT INTO exampletable (text, int) VALUES ('" + name + "', '" + age + "')";
+	std::string sqlInsertTable = "INSERT INTO exampletable (text, int) VALUES ('" + playername + "', '" + age + "')";
 	sc::Query(nonTransaction, sqlInsertTable);
 
 	printf("Data has been inserted into the database!\n");
@@ -101,6 +103,51 @@ int main()
 	sc::Query(nonTransaction, sqlCreateArrayTable);
 
 	printf("An array table has been created!\n");
+
+	//Insert data into the array table
+	printf("Name...\n");
+	std::string name;
+	std::cin >> name;
+
+	printf("Surname...\n");
+	std::string surname;
+	std::cin >> surname;
+
+	printf("Favourite number...\n");
+	int favNum;
+	std::cin >> favNum;
+
+	printf("Least favourite number...\n");
+	int lFavNum;
+	std::cin >> lFavNum;
+
+	std::vector<std::string> user;
+	user.push_back(name);
+	user.push_back(surname);
+
+	std::vector<int> numbers;
+	numbers.push_back(favNum);
+	numbers.push_back(lFavNum);
+
+	std::string sqlInsertArrays = "INSERT INTO examplearraytable (text, int) VALUES ($1, $2)";
+
+	sc::Prepare(con, nonTransaction, sqlInsertArrays, user, numbers);
+
+	printf("Data has been inserted into the database!\n");
+
+	//Retreive array data
+	std::string sqlSelectArrayUser = "SELECT text from examplearraytable WHERE id = 1";
+	std::vector<std::string> userData = sc::QueryArrayValue<std::string>(nonTransaction, sqlSelectArrayUser);
+
+	std::string sqlSelectArrayNumber = "SELECT int from examplearraytable WHERE id = 1";
+	std::vector<int> numberData = sc::QueryArrayValue<int>(nonTransaction, sqlSelectArrayNumber);
+
+	printf("Printing array data from the database...\n");
+	for (int i = 0; i < userData.size(); i++)
+		printf("User: %s\n", userData[i].c_str());
+
+	for (int i = 0; i < numberData.size(); i++)
+		printf("Numbers: %d\n", numberData[i]);
 
 	//Close connection
 	con->close();
