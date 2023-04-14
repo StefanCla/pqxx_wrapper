@@ -10,4 +10,4 @@ The library also allows users to enable asserts to be triggered for easier debug
 - [X] Transactions
 - [X] Execute queries
 - [X] Query single values
-- [ ] Query array values
+- [X] Query array values
