@@ -14,7 +14,7 @@ For examples on all the functions, check the ***examples*** folder or the ***uni
 ```c++
 //Example of executing a query
 std::string sqlCreateTable = "CREATE TABLE table_example (id SERIAL PRIMARY KEY, name TEXT NOT NULL)";
-sc::Query(transaction, createDatabase);
+sc::Query(transaction, sqlCreateTable);
 ```
 
 ```c++
